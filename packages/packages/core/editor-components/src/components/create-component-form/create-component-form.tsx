@@ -259,9 +259,14 @@ const Form = ( {
 							onChange={ ( e: React.ChangeEvent< HTMLInputElement > ) =>
 								handleChange( e, 'componentName', changeValidationSchema )
 							}
-							inputProps={ { style: { color: 'text.primary', fontWeight: '600' } } }
+							inputProps={ {
+								style: { color: 'text.primary', fontWeight: '600' },
+								onFocus: ( e: React.FocusEvent< HTMLInputElement > ) => e.target.select(),
+							} }
 							error={ Boolean( errors.componentName ) }
 							helperText={ errors.componentName }
+							// eslint-disable-next-line jsx-a11y/no-autofocus
+							autoFocus
 						/>
 					</Grid>
 				</Grid>

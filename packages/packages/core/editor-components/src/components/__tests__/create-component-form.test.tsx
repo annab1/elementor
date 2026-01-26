@@ -162,6 +162,32 @@ describe( 'CreateComponentForm', () => {
 			// Assert.
 			expect( getNameInput().value ).toBe( 'Flexbox' );
 		} );
+
+		it( 'should auto-focus component name input when form opens', () => {
+			// Arrange.
+			const { openForm, getComponentNameInput: getNameInput } = setupForm();
+
+			// Act.
+			openForm();
+
+			// Assert.
+			expect( getNameInput() ).toHaveFocus();
+		} );
+
+		it( 'should pre-select component name text when input is focused', () => {
+			// Arrange.
+			mockGetElementLabel.mockReturnValue( 'Flexbox' );
+			const { openForm, getComponentNameInput: getNameInput } = setupForm();
+			openForm();
+
+			// Act.
+			const input = getNameInput();
+			fireEvent.focus( input );
+
+			// Assert - when text is selected, selectionStart and selectionEnd should cover the full value
+			expect( input.selectionStart ).toBe( 0 );
+			expect( input.selectionEnd ).toBe( input.value.length );
+		} );
 	} );
 
 	describe( 'Input Validation', () => {
