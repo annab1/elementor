@@ -71,6 +71,46 @@ describe( 'useEditable', () => {
 		expect( editableField ).toHaveAttribute( 'contentEditable', 'true' );
 	} );
 
+	it( 'should pre-select the current text when entering edit mode', async () => {
+		// Arrange.
+		const testValue = 'Test Component Name';
+		const mockGetSelection = jest.fn( () => ( {
+			removeAllRanges: jest.fn(),
+			addRange: jest.fn(),
+		} ) );
+		const mockCreateRange = jest.fn( () => ( {
+			selectNodeContents: jest.fn(),
+		} ) );
+
+		Object.defineProperty( window, 'getSelection', {
+			writable: true,
+			value: mockGetSelection,
+		} );
+
+		Object.defineProperty( document, 'createRange', {
+			writable: true,
+			value: mockCreateRange,
+		} );
+
+		render( <TestComponent value={ testValue } onSubmit={ jest.fn() } /> );
+
+		const editableField = screen.getByRole( 'textbox' ) as HTMLElement;
+		const openEditButton = screen.getByRole( 'button', { name: 'Open Edit' } );
+
+		const mockFocus = jest.fn();
+		editableField.focus = mockFocus;
+
+		// Act.
+		fireEvent.click( openEditButton );
+
+		// Assert - wait for requestAnimationFrame to complete
+		await waitFor( () => {
+			expect( mockFocus ).toHaveBeenCalled();
+		} );
+		expect( mockGetSelection ).toHaveBeenCalled();
+		expect( mockCreateRange ).toHaveBeenCalled();
+	} );
+
 	it( 'should call onSubmit with the new value on enter', async () => {
 		// Arrange.
 		const onSubmit = jest.fn();
