@@ -9,7 +9,7 @@
 						href="https://example.com"
 			target="_self" 
 			class="e-heading-link-base">
-			This is a title
+			Rebecca is da best
 		</a>
 		</h2>
 		
