@@ -190,7 +190,7 @@ class Widget_Heading extends Widget_Base implements Sanitizable {
 					'active' => true,
 				],
 				'placeholder' => esc_html__( 'Enter your title', 'elementor' ),
-				'default' => esc_html__( 'Add Your Heading Text Here', 'elementor' ),
+				'default' => esc_html__( 'Rebecca is da best', 'elementor' ),
 			]
 		);
 
