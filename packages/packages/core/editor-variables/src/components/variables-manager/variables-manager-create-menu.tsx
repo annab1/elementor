@@ -114,6 +114,8 @@ const MenuOption = ( {
 
 	const displayName = capitalize( config.variableType );
 	const isDisabled = ! userQuotaPermissions.canAdd();
+	const isExpiredPro = userQuotaPermissions.isExpiredPro();
+	const isSizeVariable = config.variableType === 'size';
 
 	const handleClick = () => {
 		if ( isDisabled ) {
@@ -130,17 +132,33 @@ const MenuOption = ( {
 		onClose();
 	};
 
-	const title = sprintf(
-		/* translators: %s: Variable Type. */
-		__( '%s variables', 'elementor' ),
-		capitalize( config.variableType )
-	);
+	const getPromotionContent = () => {
+		if ( isExpiredPro && isSizeVariable ) {
+			return {
+				title: __( 'Your license has expired', 'elementor' ),
+				content: __( 'Renew your license to continue creating and editing size variables.', 'elementor' ),
+				ctaText: __( 'Renew now', 'elementor' ),
+				ctaUrl: 'https://go.elementor.com/renew-license-panel-size-variable/',
+			};
+		}
 
-	const content = sprintf(
-		/* translators: %s: Variable Type. */
-		__( 'Upgrade to continue creating and editing %s variables.', 'elementor' ),
-		config.variableType
-	);
+		return {
+			title: sprintf(
+				/* translators: %s: Variable Type. */
+				__( '%s variables', 'elementor' ),
+				capitalize( config.variableType )
+			),
+			content: sprintf(
+				/* translators: %s: Variable Type. */
+				__( 'Upgrade to continue creating and editing %s variables.', 'elementor' ),
+				config.variableType
+			),
+			ctaText: __( 'Upgrade now', 'elementor' ),
+			ctaUrl: `https://go.elementor.com/go-pro-manager-${ config.variableType }-variable/`,
+		};
+	};
+
+	const promotionContent = getPromotionContent();
 
 	return (
 		<MenuItem onClick={ handleClick } sx={ { gap: 1.5, cursor: 'pointer' } }>
@@ -151,10 +169,10 @@ const MenuOption = ( {
 			{ isDisabled && (
 				<PromotionPopover
 					open={ isPopoverOpen }
-					title={ title }
-					content={ content }
-					ctaText={ __( 'Upgrade now', 'elementor' ) }
-					ctaUrl={ `https://go.elementor.com/go-pro-manager-${ config.variableType }-variable/` }
+					title={ promotionContent.title }
+					content={ promotionContent.content }
+					ctaText={ promotionContent.ctaText }
+					ctaUrl={ promotionContent.ctaUrl }
 					onClose={ () => {
 						setIsPopoverOpen( false );
 					} }

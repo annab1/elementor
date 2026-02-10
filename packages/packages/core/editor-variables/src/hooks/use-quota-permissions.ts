@@ -10,9 +10,11 @@ export const useQuotaPermissions = ( variableType: string ) => {
 	const quotaConfig = window.ElementorVariablesQuotaConfig || {};
 	const limit = quotaConfig[ variableType ] || 0;
 	const hasQuota = limit > 0;
+	const licenseInfo = getLicenseInfo();
 
 	return {
-		canAdd: () => hasQuota || getLicenseInfo().hasPro,
-		canEdit: () => hasQuota || getLicenseInfo().hasPro,
+		canAdd: () => hasQuota || ( licenseInfo.hasPro && ! licenseInfo.isExpiredPro ),
+		canEdit: () => hasQuota || ( licenseInfo.hasPro && ! licenseInfo.isExpiredPro ),
+		isExpiredPro: () => licenseInfo.isExpiredPro || false,
 	};
 };

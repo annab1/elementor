@@ -42,7 +42,7 @@ export function registerVariableTypes() {
 		styleTransformer: EmptyTransformer,
 		variableType: 'size',
 		selectionFilter: () => [],
-		emptyState: <CtaButton size="small" href={ 'https://go.elementor.com/go-pro-panel-size-variable/' } />,
+		emptyState: <CtaButton size="small" href={ 'https://go.elementor.com/renew-license-panel-size-variable/' } />,
 	};
 
 	registerVariableType( {
