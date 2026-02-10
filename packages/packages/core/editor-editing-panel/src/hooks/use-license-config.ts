@@ -2,9 +2,10 @@ import { useSyncExternalStore } from 'react';
 
 export type LicenseConfig = {
 	expired: boolean;
+	isExpiredPro?: boolean;
 };
 
-let config: LicenseConfig = { expired: false };
+let config: LicenseConfig = { expired: false, isExpiredPro: false };
 const listeners = new Set< () => void >();
 
 export function setLicenseConfig( newConfig: Partial< LicenseConfig > ) {

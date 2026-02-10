@@ -24,6 +24,7 @@ import {
 } from '@elementor/ui';
 import { __ } from '@wordpress/i18n';
 
+import { getLicenseInfo } from '../../sync/license-info';
 import { trackVariablesManagerEvent } from '../../utils/tracking';
 import { type ErrorResponse, type MappedError, mapServerError } from '../../utils/validations';
 import { getVariableType } from '../../variables-registry/variable-type-registry';
@@ -79,6 +80,8 @@ export function VariablesManagerPanel() {
 
 	const [ deleteConfirmation, setDeleteConfirmation ] = useState< { id: string; label: string } | null >( null );
 	const [ serverError, setServerError ] = useState< MappedError | null >( null );
+	const licenseInfo = getLicenseInfo();
+	const isExpiredPro = licenseInfo.isExpiredPro || false;
 
 	usePreventUnload( isDirty );
 
@@ -240,9 +243,32 @@ export function VariablesManagerPanel() {
 							onAdd={ createMenuState.open }
 						/>
 					) }
-				</PanelBody>
+			</PanelBody>
 
-				<PanelFooter>
+			<PanelFooter>
+				<Stack width="100%" direction="column" gap={ 1 }>
+					{ isExpiredPro && (
+						<Alert
+							severity="warning"
+							color="promotion"
+							size="small"
+							action={
+								<AlertAction
+									variant="contained"
+									color="promotion"
+									size="small"
+									href="https://go.elementor.com/renew-license-panel-size-variable/"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{ __( 'Renew now', 'elementor' ) }
+								</AlertAction>
+							}
+						>
+							<AlertTitle>{ __( 'Your license has expired', 'elementor' ) }</AlertTitle>
+							{ __( 'Renew to continue creating and editing size variables.', 'elementor' ) }
+						</Alert>
+					) }
 					<Infotip
 						placement="right"
 						open={ !! serverError }
@@ -302,7 +328,8 @@ export function VariablesManagerPanel() {
 							{ __( 'Save changes', 'elementor' ) }
 						</Button>
 					</Infotip>
-				</PanelFooter>
+				</Stack>
+			</PanelFooter>
 			</Panel>
 
 			{ deleteConfirmation && (
