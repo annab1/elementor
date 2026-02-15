@@ -206,9 +206,6 @@ function OverrideControl( { overridableProp }: InternalProps ) {
 						propType={ propTypeSchema }
 						value={ value }
 						setValue={ setValue }
-						isDisabled={ () => {
-							return false;
-						} }
 					>
 						<PropKeyProvider bind={ overridableProp.overrideKey }>
 							<ControlReplacementsProvider replacements={ controlReplacements }>
