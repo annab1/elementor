@@ -117,7 +117,9 @@ const useSelection = ( isEditing: boolean ) => {
 
 	useEffect( () => {
 		if ( isEditing ) {
-			selectAll( ref.current );
+			requestAnimationFrame( () => {
+				selectAll( ref.current );
+			} );
 		}
 	}, [ isEditing ] );
 
@@ -125,10 +127,22 @@ const useSelection = ( isEditing: boolean ) => {
 };
 
 const selectAll = ( el: HTMLElement | null ) => {
+	if ( ! el ) {
+		return;
+	}
+
 	const selection = getSelection();
 
-	if ( ! selection || ! el ) {
+	if ( ! selection ) {
 		return;
+	}
+
+	if ( el.ownerDocument.activeElement !== el ) {
+		try {
+			el.focus( { preventScroll: true } );
+		} catch {
+			// Focus may fail in some environments
+		}
 	}
 
 	const range = document.createRange();
